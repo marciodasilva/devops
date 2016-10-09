@@ -8,9 +8,9 @@ import org.springframework.mail.SimpleMailMessage;
  */
 public interface EmailServices {
     /**
-     * @param feedbackPojo
+     * @param feedback
      */
-    public void sendFeedbackEmail(FeedbackPojo feedbackPojo);
+    public void sendFeedbackEmail(FeedbackPojo feedback);
 
     /**
      * @param message
