@@ -1,8 +1,7 @@
-package com.devops.backend.persistence.Repository;
+package com.devops.backend.persistence.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import com.devops.backend.persistence.domain.backend.User;
-import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.stereotype.Repository;
 
 /**

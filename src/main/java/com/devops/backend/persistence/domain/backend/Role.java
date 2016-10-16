@@ -1,5 +1,7 @@
 package com.devops.backend.persistence.domain.backend;
 
+import com.devops.enums.RolesEnum;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,6 +23,15 @@ public class Role {
     private Set<UserRole> userRoles = new HashSet<>();
 
     public Role(){}
+
+    /**
+     * Full constructor.
+     * @param rolesEnum
+     */
+    public Role(RolesEnum rolesEnum) {
+        this.id = rolesEnum.getId();
+        this.name = rolesEnum.getRoleName();
+    }
 
     public int getId() {
         return id;

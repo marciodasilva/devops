@@ -16,6 +16,7 @@ import org.springframework.context.annotation.PropertySource;
 @Profile("dev")
 @PropertySource("file:///${user.home}/.devops/application-dev.properties")
 public class DevelopmentConfig {
+
     @Bean
     public EmailServices emailServices(){
         return new MockEmailService();
