@@ -33,7 +33,10 @@ public class DevopsApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		User user = UsersUtils.createBasicUser();
+		String username = "marciodasilva";
+		String email = "marciodasilva@hotmail.com";
+		User user = UsersUtils.createBasicUser(username, email);
+
 		Set<UserRole> userRoles = new HashSet<>();
 		userRoles.add(new UserRole(user, new Role(RolesEnum.PRO)));
 		LOG.debug("Creating user with username {}", user.getUsername());
