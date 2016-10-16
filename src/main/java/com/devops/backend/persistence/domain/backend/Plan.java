@@ -1,5 +1,4 @@
 package com.devops.backend.persistence.domain.backend;
-
 import com.devops.enums.PlansEnum;
 
 import javax.persistence.Entity;

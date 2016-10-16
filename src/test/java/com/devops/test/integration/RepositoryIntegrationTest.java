@@ -2,13 +2,14 @@ package com.devops.test.integration;
 
 import com.devops.DevopsApplication;
 
-import com.devops.backend.persistence.repository.PlanRepository;
-import com.devops.backend.persistence.repository.RoleRepository;
-import com.devops.backend.persistence.repository.UserRepository;
+import com.devops.utils.UsersUtils;
 import com.devops.backend.persistence.domain.backend.Plan;
 import com.devops.backend.persistence.domain.backend.Role;
 import com.devops.backend.persistence.domain.backend.User;
 import com.devops.backend.persistence.domain.backend.UserRole;
+import com.devops.backend.persistence.repository.PlanRepository;
+import com.devops.backend.persistence.repository.RoleRepository;
+import com.devops.backend.persistence.repository.UserRepository;
 import com.devops.enums.PlansEnum;
 import com.devops.enums.RolesEnum;
 import com.devops.utils.UsersUtils;
@@ -24,12 +25,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by marciodasilva on 10/15/16.
+ * Created by tedonema on 29/03/2016.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = DevopsApplication.class)
 public class RepositoryIntegrationTest {
-
 
     @Autowired
     private PlanRepository planRepository;
@@ -37,15 +37,14 @@ public class RepositoryIntegrationTest {
     @Autowired
     private RoleRepository roleRepository;
 
-   @Autowired
-   private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    private static final int BASIC_PLAN_ID = 1;
-    private static final int BASIC_ROLE_ID = 1 ;
+
+
 
     @Before
-    public void init(){
-
+    public void init() {
         Assert.assertNotNull(planRepository);
         Assert.assertNotNull(roleRepository);
         Assert.assertNotNull(userRepository);
@@ -72,24 +71,8 @@ public class RepositoryIntegrationTest {
     @Test
     public void createNewUser() throws Exception {
 
-        Plan basicPlan = createPlan(PlansEnum.BASIC);
-        planRepository.save(basicPlan);
+        User basicUser = createUser();
 
-        User basicUser = UsersUtils.createBasicUser();
-        basicUser.setPlan(basicPlan);
-
-        Role basicRole = createRole(RolesEnum.BASIC);
-        Set<UserRole> userRoles = new HashSet<>();
-        UserRole userRole = new UserRole(basicUser, basicRole);
-        userRoles.add(userRole);
-
-        basicUser.getUserRoles().addAll(userRoles);
-
-        for (UserRole ur : userRoles) {
-            roleRepository.save(ur.getRole());
-        }
-
-        basicUser = userRepository.save(basicUser);
         User newlyCreatedUser = userRepository.findOne(basicUser.getId());
         Assert.assertNotNull(newlyCreatedUser);
         Assert.assertTrue(newlyCreatedUser.getId() != 0);
@@ -103,8 +86,11 @@ public class RepositoryIntegrationTest {
 
     }
 
-
-
+    @Test
+    public void testDeleteUser() throws Exception {
+        User basicUser = createUser();
+        userRepository.delete(basicUser.getId());
+    }
 
     //-----------------> Private methods
 
@@ -114,5 +100,24 @@ public class RepositoryIntegrationTest {
 
     private Role createRole(RolesEnum rolesEnum) {
         return new Role(rolesEnum);
+    }
+
+    private User createUser() {
+        Plan basicPlan = createPlan(PlansEnum.BASIC);
+        planRepository.save(basicPlan);
+
+        User basicUser = UsersUtils.createBasicUser();
+        basicUser.setPlan(basicPlan);
+
+        Role basicRole = createRole(RolesEnum.BASIC);
+        roleRepository.save(basicRole);
+
+        Set<UserRole> userRoles = new HashSet<>();
+        UserRole userRole = new UserRole(basicUser, basicRole);
+        userRoles.add(userRole);
+
+        basicUser.getUserRoles().addAll(userRoles);
+        basicUser = userRepository.save(basicUser);
+        return basicUser;
     }
 }

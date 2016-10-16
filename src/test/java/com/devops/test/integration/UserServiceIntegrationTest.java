@@ -1,7 +1,6 @@
 package com.devops.test.integration;
 
 import com.devops.DevopsApplication;
-import com.devops.DevopsApplication;
 import com.devops.backend.persistence.domain.backend.Role;
 import com.devops.backend.persistence.domain.backend.User;
 import com.devops.backend.persistence.domain.backend.UserRole;
@@ -19,9 +18,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by tedonema on 30/03/2016.
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(DevopsApplication.class)
 public class UserServiceIntegrationTest {
