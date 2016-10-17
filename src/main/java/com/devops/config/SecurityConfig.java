@@ -1,6 +1,7 @@
 package com.devops.config;
 
 import com.devops.backend.service.UserSecurityService;
+import com.devops.web.controllers.ForgotMyPasswordController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +47,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/about/**",
             "/contact/**",
             "/error/**/*",
-            "/console/**"
+            "/console/**",
+            ForgotMyPasswordController.FORGOT_PASSWORD_URL_MAPPING,
+            ForgotMyPasswordController.CHANGE_PASSWORD_PATH
     };
 
     @Override

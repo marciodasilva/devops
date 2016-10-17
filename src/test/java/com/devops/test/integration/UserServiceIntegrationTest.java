@@ -22,16 +22,25 @@ import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(DevopsApplication.class)
-public class UserServiceIntegrationTest {
+public class UserServiceIntegrationTest extends AbstractIntegrationTest{
 
     @Autowired
-    private UserService userService;
+    protected UserService userService;
 
     @Rule
     public TestName testname = new TestName();
 
     @Test
     public void testCreateNewUser() throws Exception {
+
+
+        User user = createUser(testname);
+        Assert.assertNotNull(user);
+        Assert.assertNotNull(user.getId());
+
+    }
+
+    protected User createUser(TestName testname){
         String username = testname.getMethodName();
         String email = testname.getMethodName()+"@hotmail.com";
 
@@ -39,9 +48,6 @@ public class UserServiceIntegrationTest {
         User basicUser = UsersUtils.createBasicUser(username, email);
         userRoles.add(new UserRole(basicUser, new Role(RolesEnum.BASIC)));
 
-        User user = userService.createUser(basicUser, PlansEnum.BASIC, userRoles);
-        Assert.assertNotNull(user);
-        Assert.assertNotNull(user.getId());
-
+        return basicUser;
     }
 }

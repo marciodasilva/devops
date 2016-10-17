@@ -25,26 +25,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by tedonema on 29/03/2016.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = DevopsApplication.class)
-public class RepositoryIntegrationTest {
-
-    @Autowired
-    private PlanRepository planRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+public class UserRepositoryIntegrationTest extends AbstractIntegrationTest{
 
     @Rule public TestName testname = new TestName();
-
-
 
     @Before
     public void init() {
@@ -94,39 +84,35 @@ public class RepositoryIntegrationTest {
 
     @Test
     public void testDeleteUser() throws Exception {
+
         String username = testname.getMethodName();
-        String email = testname.getMethodName()+"@hotmail.com";
+        String email = testname.getMethodName() + "@hotmail.com";
 
         User basicUser = createUser(username, email);
         userRepository.delete(basicUser.getId());
     }
 
-    //-----------------> Private methods
+    @Test
+    public void testGetUserByEmail() throws Exception {
+        User user = createUser(testname);
 
-    private Plan createPlan(PlansEnum plansEnum) {
-        return new Plan(plansEnum);
+        User newlyFoundUser = userRepository.findByEmail(user.getEmail());
+        Assert.assertNotNull(newlyFoundUser);
+        Assert.assertNotNull(newlyFoundUser.getId());
     }
 
-    private Role createRole(RolesEnum rolesEnum) {
-        return new Role(rolesEnum);
-    }
+    @Test
+    public void testUpdateUserPassword() throws Exception {
+        User user = createUser(testname);
+        Assert.assertNotNull(user);
+        Assert.assertNotNull(user.getId());
 
-    private User createUser(String username, String email) {
-        Plan basicPlan = createPlan(PlansEnum.BASIC);
-        planRepository.save(basicPlan);
+        String newPassword = UUID.randomUUID().toString();
 
-        User basicUser = UsersUtils.createBasicUser(username, email);
-        basicUser.setPlan(basicPlan);
+        userRepository.updateUserPassword(user.getId(), newPassword);
 
-        Role basicRole = createRole(RolesEnum.BASIC);
-        roleRepository.save(basicRole);
+        user = userRepository.findOne(user.getId());
+        Assert.assertEquals(newPassword, user.getPassword());
 
-        Set<UserRole> userRoles = new HashSet<>();
-        UserRole userRole = new UserRole(basicUser, basicRole);
-        userRoles.add(userRole);
-
-        basicUser.getUserRoles().addAll(userRoles);
-        basicUser = userRepository.save(basicUser);
-        return basicUser;
     }
 }
